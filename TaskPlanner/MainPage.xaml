@@ -1,24 +1,86 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TaskPlanner.MainPage">
+             x:Class="TaskPlanner.MainPage"
+             Title="Планировщик задач"
+             Padding="20">
 
-    <StackLayout>
-        <Frame BackgroundColor="#2196F3" Padding="24" CornerRadius="0">
-            <Label Text="Welcome to Xamarin.Forms!" HorizontalTextAlignment="Center" TextColor="White" FontSize="36"/>
-        </Frame>
-        <Label Text="Start developing now" FontSize="Title" Padding="30,10,30,10"/>
-        <Label Text="Make changes to your XAML file and save to see your UI update in the running app with XAML Hot Reload. Give it a try!" FontSize="16" Padding="30,0,30,0"/>
-        <Label FontSize="16" Padding="30,24,30,0">
-            <Label.FormattedText>
-                <FormattedString>
-                    <FormattedString.Spans>
-                        <Span Text="Learn more at "/>
-                        <Span Text="https://aka.ms/xamarin-quickstart" FontAttributes="Bold"/>
-                    </FormattedString.Spans>
-                </FormattedString>
-            </Label.FormattedText>
-        </Label>
-    </StackLayout>
+    <ScrollView>
+        <StackLayout Spacing="15">
+
+            <!-- Заголовок -->
+            <Label Text="Планировщик задач" 
+                   FontSize="Title" 
+                   HorizontalOptions="Center"
+                   TextColor="#2196F3"/>
+
+            <!-- Форма добавления задачи -->
+            <Frame BackgroundColor="#F5F5F5" 
+                   CornerRadius="10" 
+                   Padding="15">
+                <StackLayout Spacing="10">
+                    <Label Text="Добавить новую задачу" 
+                           FontSize="Medium" 
+                           FontAttributes="Bold"/>
+
+                    <!-- Поле ввода названия -->
+                    <StackLayout>
+                        <Label Text="Название задачи:" 
+                               FontSize="Small"/>
+                        <Entry x:Name="TaskEntry" 
+                               Placeholder="Введите задачу..."
+                               Completed="OnAddTaskClicked"/>
+                    </StackLayout>
+
+                    <!-- Выбор категории -->
+                    <StackLayout>
+                        <Label Text="Категория:" 
+                               FontSize="Small"/>
+                        <Picker x:Name="CategoryPicker"
+                                Title="Выберите категорию"
+                                SelectedIndexChanged="OnCategorySelected">
+                            <Picker.Items>
+                                <x:String>Работа</x:String>
+                                <x:String>Учеба</x:String>
+                                <x:String>Личное</x:String>
+                                <x:String>Покупки</x:String>
+                                <x:String>Дом</x:String>
+                                <x:String>Другое</x:String>
+                            </Picker.Items>
+                        </Picker>
+                    </StackLayout>
+
+                    <!-- Кнопка добавления -->
+                    <Button Text="Добавить задачу" 
+                            BackgroundColor="#4CAF50" 
+                            TextColor="White"
+                            CornerRadius="20"
+                            Clicked="OnAddTaskClicked"/>
+                </StackLayout>
+            </Frame>
+
+            <!-- Список задач -->
+            <StackLayout>
+                <Label Text="Список задач:" 
+                       FontSize="Medium" 
+                       FontAttributes="Bold"/>
+
+                <!-- Статистика -->
+                <Grid ColumnDefinitions="*, *" 
+                      Margin="0,0,0,10">
+                    <Label Text="{Binding TotalTasks, StringFormat='Всего задач: {0}'}"
+                           Grid.Column="0"/>
+                    <Label Text="{Binding CompletedTasks, StringFormat='Выполнено: {0}'}"
+                           Grid.Column="1"
+                           HorizontalOptions="End"/>
+                </Grid>
+
+                <!-- Контейнер для задач -->
+                <StackLayout x:Name="TasksContainer" 
+                             Spacing="10"/>
+            </StackLayout>
+
+        </StackLayout>
+    </ScrollView>
 
 </ContentPage>

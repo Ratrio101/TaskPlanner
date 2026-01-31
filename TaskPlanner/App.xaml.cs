@@ -10,7 +10,13 @@ namespace TaskPlanner
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            Application.Current.Resources.Clear();
+
+            MainPage = new NavigationPage(new MainPage())
+            {
+                BarBackgroundColor = Color.FromHex("#2196F3"),
+                BarTextColor = Color.White
+            };
         }
 
         protected override void OnStart()
