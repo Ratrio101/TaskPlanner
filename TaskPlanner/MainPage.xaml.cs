@@ -154,33 +154,48 @@ namespace TaskPlanner
                 Spacing = 5
             };
 
-
             // Кнопка редактирования
             var editButton = new Button
             {
-                Text = "Редактировать",
+                Text = "🖍️",
                 BackgroundColor = Color.Transparent,
-                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Button)),
-                WidthRequest = 40
+                FontSize = 20,
+                WidthRequest = 40,
+                HeightRequest = 40,
+                Padding = 0,
+                Margin = 0
             };
-            editButton.Clicked += async (s, e) => await OnEditTaskClicked(task);
 
             // Кнопка удаления
             var deleteButton = new Button
             {
-                Text = "Удалить",
+                Text = "X",
                 BackgroundColor = Color.Transparent,
-                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Button)),
-                WidthRequest = 40
+                FontSize = 20,
+                WidthRequest = 40,
+                HeightRequest = 40,
+                Padding = 0,
+                Margin = new Thickness(5, 0, 0, 0)
             };
+
+            // Обработчики
+            editButton.Clicked += async (s, e) => await OnEditTaskClicked(task);
             deleteButton.Clicked += async (s, e) => await OnDeleteTaskClicked(task);
 
-            actionsStack.Children.Add(editButton);
-            actionsStack.Children.Add(deleteButton);
+            // Создаем горизонтальный контейнер
+            var buttonsContainer = new StackLayout
+            {
+                Orientation = StackOrientation.Horizontal,
+                Spacing = 0,
+                VerticalOptions = LayoutOptions.Center
+            };
+            buttonsContainer.Children.Add(editButton);
+            buttonsContainer.Children.Add(deleteButton);
 
-            Grid.SetColumn(actionsStack, 2);
-            Grid.SetRowSpan(actionsStack, 2);
-            grid.Children.Add(actionsStack);
+            // Добавляем в Grid
+            Grid.SetColumn(buttonsContainer, 2);
+            Grid.SetRowSpan(buttonsContainer, 2);
+            grid.Children.Add(buttonsContainer);
 
             return new Frame
             {
