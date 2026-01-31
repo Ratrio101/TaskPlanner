@@ -12,7 +12,7 @@ namespace TaskPlanner
 
             Application.Current.Resources.Clear();
 
-            MainPage = new NavigationPage(new MainPage())
+            MainPage = new NavigationPage(new MainPage()) // обозначаем MainPage как главную
             {
                 BarBackgroundColor = Color.FromHex("#2196F3"),
                 BarTextColor = Color.White

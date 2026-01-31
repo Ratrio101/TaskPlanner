@@ -1,4 +1,6 @@
-﻿using System;
+﻿/* Пространства имен */
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -11,12 +13,12 @@ namespace TaskPlanner
 {
     public partial class MainPage : ContentPage
     {
-        private List<TaskItem> _tasks;
-        private DataService _dataService;
+        private List<TaskItem> _tasks; // список задач
+        private DataService _dataService; // подключаем дата-сервис (работу с JSON)
         private string _selectedCategory = "Работа";
 
-        public int TotalTasks => _tasks?.Count ?? 0;
-        public int CompletedTasks => _tasks?.Count(t => t.IsCompleted) ?? 0;
+        public int TotalTasks => _tasks?.Count ?? 0; // подсчет общего количества задач
+        public int CompletedTasks => _tasks?.Count(t => t.IsCompleted) ?? 0; // завершенные задачи
 
         public MainPage()
         {
@@ -24,20 +26,20 @@ namespace TaskPlanner
             _dataService = new DataService();
             _tasks = new List<TaskItem>();
 
-            // Устанавливаем первую категорию по умолчанию
+            // Устанавливаем первую категорию по умолчанию (Работа)
             CategoryPicker.SelectedIndex = 0;
 
             // Загружаем задачи при запуске
             LoadTasks();
         }
 
-        protected override async void OnAppearing()
+        protected override async void OnAppearing() // при появлении
         {
             base.OnAppearing();
             await LoadTasks();
         }
 
-        private async Task LoadTasks()
+        private async Task LoadTasks() // загрузка задач
         {
             _tasks = await _dataService.LoadTasksAsync();
             UpdateTasksList();
@@ -45,11 +47,11 @@ namespace TaskPlanner
             OnPropertyChanged(nameof(CompletedTasks));
         }
 
-        private void UpdateTasksList()
+        private void UpdateTasksList() // редактиуем список задач
         {
             TasksContainer.Children.Clear();
 
-            if (!_tasks.Any())
+            if (!_tasks.Any()) // если их нет, пишем, что пусто
             {
                 var emptyLabel = new Label
                 {
@@ -72,7 +74,7 @@ namespace TaskPlanner
 
         private Frame CreateTaskFrame(TaskItem task)
         {
-            // Сначала создаем Grid
+            // Создаем Grid
             var grid = new Grid
             {
                 ColumnDefinitions =
@@ -98,7 +100,7 @@ namespace TaskPlanner
                 VerticalOptions = LayoutOptions.Start
             };
 
-            // Создаем Frame ПЕРЕД тем как добавлять обработчик
+            // Создаем Frame перед тем, как добавлять обработчик
             var taskFrame = new Frame
             {
                 Content = grid,
@@ -109,7 +111,7 @@ namespace TaskPlanner
                 Margin = new Thickness(0, 0, 0, 5)
             };
 
-            // Теперь добавляем обработчик - taskFrame уже создан!
+            // Теперь добавляем обработчик
             checkBox.CheckedChanged += async (s, e) =>
             {
                 task.IsCompleted = e.Value;
@@ -191,7 +193,7 @@ namespace TaskPlanner
             };
         }
 
-        private void UpdateTaskVisual(Frame taskFrame, TaskItem task)
+        private void UpdateTaskVisual(Frame taskFrame, TaskItem task) // отрисовка списка
         {
             var grid = taskFrame.Content as Grid;
             var titleLabel = grid.Children.OfType<Label>().FirstOrDefault();
@@ -207,7 +209,7 @@ namespace TaskPlanner
                 Color.FromHex("#E8F5E9") : Color.White;
         }
 
-        private async void OnAddTaskClicked(object sender, EventArgs e)
+        private async void OnAddTaskClicked(object sender, EventArgs e) // при нажатии на добавление
         {
             if (string.IsNullOrWhiteSpace(TaskEntry.Text))
             {
@@ -223,7 +225,7 @@ namespace TaskPlanner
             await LoadTasks();
         }
 
-        private void OnCategorySelected(object sender, EventArgs e)
+        private void OnCategorySelected(object sender, EventArgs e) // при выборе категории
         {
             var picker = sender as Picker;
             if (picker.SelectedIndex != -1)
@@ -232,7 +234,7 @@ namespace TaskPlanner
             }
         }
 
-        private async Task OnEditTaskClicked(TaskItem task)
+        private async Task OnEditTaskClicked(TaskItem task) // при нажатии на редактирование
         {
             var newTitle = await DisplayPromptAsync(
                 "Редактирование задачи",
@@ -249,7 +251,7 @@ namespace TaskPlanner
             }
         }
 
-        private async Task OnDeleteTaskClicked(TaskItem task)
+        private async Task OnDeleteTaskClicked(TaskItem task) // при нажатии на удаление
         {
             var result = await DisplayAlert(
                 "Удаление задачи",
